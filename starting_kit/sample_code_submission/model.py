@@ -6,7 +6,6 @@ You must supply at least 4 methods:
 - save: saves the model.
 - load: reloads the model.
 '''
-
 import pickle
 import numpy as np   # We recommend to use numpy arrays
 from os.path import isfile
@@ -19,6 +18,44 @@ from sklearn import gaussian_process
 from sklearn import neural_network
 from sklearn import svm
 from sklearn import neighbors
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.pipeline import Pipeline
+from sklearn.svm import SVC
+from sklearn.decomposition import PCA
+from sklearn.metrics import precision_score
+
+
+class Preprocessing(BaseEstimator):
+    def __init__(self):
+        lil_clf = SVC(kernel='linear') # classifieur lineaire
+		
+        self.transformer = PCA(n_components=200)#on veut que le resultat soit composé de 100 features
+    def fit(self, Xtrain, Ytrain):
+        #premiere methode de preprocessing
+        X_scaled = preprocessing.scale(X_train)
+        Y_scaled = preprocessing.scale(Y_train)
+        Xtrain_transf=self.transformer.fit_transform(Xtrain)
+        Ytrain_transf=self.transformer.fit_transform(Ytrain)
+        return Xtrain_transf,Ytrain_transf
+        
+        
+        
+        #methode de preprocessing avec pipline 
+        #pipe = Pipeline(BaseEstimator)
+        #pipe 
+        #Pipeline(memory=None,steps=[('reduction_dim', self.transformer),('lil_clf', lil_clf)])
+
+    def fit_transform(self, X, Y):
+        return self.transformer.fit_transform(X,Y)
+
+    def transform(self, X, Y):
+        return self.transformer.transform(X,Y)
+
+
+
+
+
 
 class model (BaseEstimator):
 
@@ -94,7 +131,6 @@ class model (BaseEstimator):
             clf = classifiers[i]
             clf.fit(X, y)
             scores[classifier_names[i]] = clf.score(X, y)
-
         print(scores)
         """
         
