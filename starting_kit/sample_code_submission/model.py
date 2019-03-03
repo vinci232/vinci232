@@ -30,7 +30,7 @@ class Preprocessing(BaseEstimator):
     def __init__(self):
         lil_clf = SVC(kernel='linear') # classifieur lineaire
 		
-        self.transformer = PCA(n_components=200)#on veut que le resultat soit composé de 100 features
+        self.transformer = PCA(n_components=100)#on veut que le resultat soit composé de 100 features
     def fit(self, Xtrain, Ytrain):
         #premiere methode de preprocessing
         X_scaled = preprocessing.scale(X_train)
@@ -52,11 +52,6 @@ class Preprocessing(BaseEstimator):
     def transform(self, X, Y):
         return self.transformer.transform(X,Y)
 
-
-
-
-
-
 class model (BaseEstimator):
 
     def __init__(self):
@@ -65,7 +60,7 @@ class model (BaseEstimator):
         Use triple quotes for function documentation. 
         '''
         self.num_train_samples=65856
-        self.num_feat=200
+        self.num_feat=100
         self.num_labels=2
         self.is_trained=False
         self.model = clf = linear_model.LogisticRegression()
