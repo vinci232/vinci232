@@ -51,6 +51,7 @@ class Preprocessing(BaseEstimator):
 
     def transform(self, X, Y):
         return self.transformer.transform(X,Y)
+    
 
 class model (BaseEstimator):
 
@@ -185,3 +186,19 @@ class model (BaseEstimator):
                 self = pickle.load(f)
             print("Model reloaded from: " + modelfile)
         return self
+
+ class main ():
+	data = load("./pubic_data")
+	_init_(data)
+	
+	#data.data['Xtrain']=fit(self,data.data['Xtrain'])
+	#data.data['Ytrain']=fit(self,data.data['ytrain'])
+	
+	
+	pipe = Pipeline(BaseEstimator)
+        pipe 
+        Pipeline(memory=None,steps=[('reduction_dim',fit(self,data.data['Xtrain'],data.data['Ytrain'])) ),('lil_clf', lil_clf)])
+	
+	
+	
+	
