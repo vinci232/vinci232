@@ -27,6 +27,23 @@ from sklearn.metrics import precision_score
 
 
 class Preprocessing(BaseEstimator):
+<<<<<<< HEAD
+
+    def __init__(self):
+        lil_clf = SVC(kernel='linear') # classifieur lineaire
+        self.transformer = PCA(n_components=100) # on veut que le resultat soit compose de 100 features
+        self.pipe = Pipeline(BaseEstimator)
+        self.pipe 
+        Pipeline(memory=None, steps=[('reduction_dim',fit(self,data.data['Xtrain'],data.data['Ytrain'])), ('lil_clf', lil_clf)])
+        
+    def fit(self, Xtrain, Ytrain):
+        # premiere methode de preprocessing
+        X_scaled = preprocessing.scale(X_train)
+        Y_scaled = preprocessing.scale(Y_train)
+        Xtrain_transf=self.transformer.fit_transform(Xtrain)
+        Ytrain_transf=self.transformer.fit_transform(Ytrain)       
+        return Xtrain_transf,Ytrain_transf
+=======
     def __init__(self):
         lil_clf = SVC(kernel='linear') # classifieur lineaire
 		
@@ -45,13 +62,17 @@ class Preprocessing(BaseEstimator):
         #pipe = Pipeline(BaseEstimator)
         #pipe 
         #Pipeline(memory=None,steps=[('reduction_dim', self.transformer),('lil_clf', lil_clf)])
+>>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
 
     def fit_transform(self, X, Y):
         return self.transformer.fit_transform(X,Y)
 
     def transform(self, X, Y):
         return self.transformer.transform(X,Y)
+<<<<<<< HEAD
+=======
     
+>>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
 
 class model (BaseEstimator):
 
@@ -60,10 +81,17 @@ class model (BaseEstimator):
         This constructor is supposed to initialize data members.
         Use triple quotes for function documentation. 
         '''
+<<<<<<< HEAD
+        self.num_train_samples = 65856
+        self.num_feat = 100
+        self.num_labels = 2
+        self.is_trained = False
+=======
         self.num_train_samples=65856
         self.num_feat=100
         self.num_labels=2
         self.is_trained=False
+>>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
         self.model = clf = linear_model.LogisticRegression()
         
     def fit(self, X, y):
@@ -96,10 +124,19 @@ class model (BaseEstimator):
         self.model = self.model.fit(X, y)
         '''
         
+<<<<<<< HEAD
+	# Implementation of the preprocessor
+        # preproc = Preprocessing()
+        # X = preproc.fit_transform(X, y)
+        
+        # Code for testing different classifiers.
+        # We will keep the classifier with the highest score, with their default hyperparameters
+=======
         # Code for testing different classifiers.
         # We will keep the classifier with the highest score, with their default hyperparameters
         global clf
         
+>>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
         scores = {}
         
         classifier_names = [
@@ -122,11 +159,23 @@ class model (BaseEstimator):
         svm.SVC(),
         neighbors.RadiusNeighborsClassifier()]
         
+<<<<<<< HEAD
+        # This block is commented after its first execution.
+        # Indeed, we only need it once in order to give us the best classifier to use.
+        # But since it has to build a whole model and fit it at each iteration, it is really long to use.
+        # We first use in order to get the best classifier, then we comment it in order to gain in efficiency.
+        """
+        for i in range(len(classifiers)):
+            self.model = classifiers[i]
+            self.model.fit(X, y)
+            scores[classifier_names[i]] = self.model.score(X, y)
+=======
         """
         for i in range(len(classifiers)):
             clf = classifiers[i]
             clf.fit(X, y)
             scores[classifier_names[i]] = clf.score(X, y)
+>>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
         print(scores)
         """
         
@@ -139,9 +188,98 @@ class model (BaseEstimator):
         # Now, let's fine tune the hyperparameters of this classifier
         # We refer you to the classifier's documentation:
         # https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html
+<<<<<<< HEAD
+        # We are going to use a dichtomy algorithm on specific hyperparameters that we selected
+        
+        hyperparameters = {
+        'activation' : ['identity', 'logistic', 'tanh', 'relu'],
+        'solver' : ['lbfgs', 'sgd', 'adam'],
+        'learning_rate' : ['constant', 'invscaling', 'adaptative'],
+        'learning_rate_init' : 'float',
+        'beta_1' : 'float',
+        'beta_2' : 'float',
+        'max_iter' : 'int'}
+        
+        # Same as before, after the first run, we took the best hyperparameters and commented the whole thing.
+        # We keep this code block here for reference, and for you to understand how we fine-tuned our HPs.
+        """
+        for i in range(len(hyperparameters['activation'])):
+            self.model = neural_network.MLPClassifier(activation = hyperparameters['activation'][i])
+            self.model.fit(X, y)
+            print("activation " + hyperparameters['activation'][i] + " : " + self.model.score(X, y))
+        
+        for i in range(len(hyperparameters['solver'])):
+            self.model = neural_network.MLPClassifier(solver = hyperparameters['solver'][i])
+            self.model.fit(X, y)
+            print("solver " + hyperparameters['solver'][i] + " : " + self.model.score(X, y))
+        
+        for i in range(len(hyperparameters['learning_rate'])):
+            self.model = neural_network.MLPClassifier(learning_rate = hyperparameters['learning_rate'][i])
+            self.model.fit(X, y)
+            print("learning_rate " + hyperparameters['learning_rate'][i] + " : " + self.model.score(X, y))
+        
+        # Since these algorithms are really long to run, we only have time to make 5 iterations.
+        for i in range(5):
+            m = 0.0001
+            M = 0.001
+            s = 0.9657
+            S = 0.8949
+            # These HP values were ran by hand to initialize the dichotomy
+            self.model = neural_network.MLPClassifier(learning_rate_init = (m+M)/2)
+            s1 = self.model.score(X, y)
+            if (s1 > s) :
+                m = (m+M)/2
+                s = s1
+                best_value = m
+            else :
+                M = (m+M)/2
+                S = s1
+                best_value = M
+        print("learning_rate_init : " + best_value)
+        
+        for i in range(5):
+            m = 0.8
+            M = 0.9
+            s = 0.9598
+            S = 0.9657
+            # These HP values were ran by hand to initialize the dichotomy
+            self.model = neural_network.MLPClassifier(beta_1 = (m+M)/2)
+            s1 = self.model.score(X, y)
+            if (s1 > s) :
+                m = (m+M)/2
+                s = s1
+                best_value = m
+            else :
+                M = (m+M)/2
+                S = s1
+                best_value = M
+        print("beta_1 : " + best_value)
+        
+        # beta_2 fine-tuning took too long to run. We had to kill the process.
+        for i in range(5):
+            m = 0.0001
+            M = 0.001
+            s = 0.9657
+            S = 0.8949
+            # These HP values were ran by hand to initialize the dichotomy
+            self.model = neural_network.MLPClassifier(beta_2 = (m+M)/2)
+            s1 = self.model.score(X, y)
+            if (s1 > s) :
+                m = (m+M)/2
+                s = s1
+            else :
+                M = (m+M)/2
+                S = s1
+        """
+        
+        self.model = neural_network.MLPClassifier(activation = 'relu', solver = 'adam', learning_rate = 'adaptive', learning_rate_init = 0.00005, beta_1 = 0.9, beta_2 = 0.999, max_iter = 500, epsilon = 1e-9)
+        self.model.fit(X, y)
+        print(self.model.score(X, y))
+=======
         clf = neural_network.MLPClassifier(activation = 'relu', solver = 'adam', learning_rate = 'adaptive', learning_rate_init = 0.00005, beta_1 = 0.9, beta_2 = 0.999, max_iter = 500, epsilon = 1e-9)
         clf.fit(X, y)
         print(clf.score(X, y))
+>>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
 
     def predict(self, X):
         '''
@@ -171,9 +309,13 @@ class model (BaseEstimator):
         return y[:,1]
         '''
         
+<<<<<<< HEAD
+        return self.model.predict(X)
+=======
         global clf
         
         return clf.predict(X)
+>>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
         
 
     def save(self, path="./"):
@@ -186,6 +328,8 @@ class model (BaseEstimator):
                 self = pickle.load(f)
             print("Model reloaded from: " + modelfile)
         return self
+<<<<<<< HEAD
+=======
 
  class main ():
 	data = load("./pubic_data")
@@ -202,3 +346,4 @@ class model (BaseEstimator):
 	
 	
 	
+>>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
