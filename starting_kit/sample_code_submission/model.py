@@ -27,7 +27,6 @@ from sklearn.metrics import precision_score
 
 
 class Preprocessing(BaseEstimator):
-<<<<<<< HEAD
 
     def __init__(self):
         lil_clf = SVC(kernel='linear') # classifieur lineaire
@@ -43,36 +42,12 @@ class Preprocessing(BaseEstimator):
         Xtrain_transf=self.transformer.fit_transform(Xtrain)
         Ytrain_transf=self.transformer.fit_transform(Ytrain)       
         return Xtrain_transf,Ytrain_transf
-=======
-    def __init__(self):
-        lil_clf = SVC(kernel='linear') # classifieur lineaire
-		
-        self.transformer = PCA(n_components=100)#on veut que le resultat soit composé de 100 features
-    def fit(self, Xtrain, Ytrain):
-        #premiere methode de preprocessing
-        X_scaled = preprocessing.scale(X_train)
-        Y_scaled = preprocessing.scale(Y_train)
-        Xtrain_transf=self.transformer.fit_transform(Xtrain)
-        Ytrain_transf=self.transformer.fit_transform(Ytrain)
-        return Xtrain_transf,Ytrain_transf
-        
-        
-        
-        #methode de preprocessing avec pipline 
-        #pipe = Pipeline(BaseEstimator)
-        #pipe 
-        #Pipeline(memory=None,steps=[('reduction_dim', self.transformer),('lil_clf', lil_clf)])
->>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
 
     def fit_transform(self, X, Y):
         return self.transformer.fit_transform(X,Y)
 
     def transform(self, X, Y):
         return self.transformer.transform(X,Y)
-<<<<<<< HEAD
-=======
-    
->>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
 
 class model (BaseEstimator):
 
@@ -81,17 +56,10 @@ class model (BaseEstimator):
         This constructor is supposed to initialize data members.
         Use triple quotes for function documentation. 
         '''
-<<<<<<< HEAD
         self.num_train_samples = 65856
         self.num_feat = 100
         self.num_labels = 2
         self.is_trained = False
-=======
-        self.num_train_samples=65856
-        self.num_feat=100
-        self.num_labels=2
-        self.is_trained=False
->>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
         self.model = clf = linear_model.LogisticRegression()
         
     def fit(self, X, y):
@@ -124,19 +92,15 @@ class model (BaseEstimator):
         self.model = self.model.fit(X, y)
         '''
         
-<<<<<<< HEAD
-	# Implementation of the preprocessor
+
+		# Implementation of the preprocessor
         # preproc = Preprocessing()
         # X = preproc.fit_transform(X, y)
         
         # Code for testing different classifiers.
         # We will keep the classifier with the highest score, with their default hyperparameters
-=======
-        # Code for testing different classifiers.
-        # We will keep the classifier with the highest score, with their default hyperparameters
-        global clf
+
         
->>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
         scores = {}
         
         classifier_names = [
@@ -159,7 +123,6 @@ class model (BaseEstimator):
         svm.SVC(),
         neighbors.RadiusNeighborsClassifier()]
         
-<<<<<<< HEAD
         # This block is commented after its first execution.
         # Indeed, we only need it once in order to give us the best classifier to use.
         # But since it has to build a whole model and fit it at each iteration, it is really long to use.
@@ -169,13 +132,6 @@ class model (BaseEstimator):
             self.model = classifiers[i]
             self.model.fit(X, y)
             scores[classifier_names[i]] = self.model.score(X, y)
-=======
-        """
-        for i in range(len(classifiers)):
-            clf = classifiers[i]
-            clf.fit(X, y)
-            scores[classifier_names[i]] = clf.score(X, y)
->>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
         print(scores)
         """
         
@@ -188,7 +144,6 @@ class model (BaseEstimator):
         # Now, let's fine tune the hyperparameters of this classifier
         # We refer you to the classifier's documentation:
         # https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html
-<<<<<<< HEAD
         # We are going to use a dichtomy algorithm on specific hyperparameters that we selected
         
         hyperparameters = {
@@ -275,11 +230,6 @@ class model (BaseEstimator):
         self.model = neural_network.MLPClassifier(activation = 'relu', solver = 'adam', learning_rate = 'adaptive', learning_rate_init = 0.00005, beta_1 = 0.9, beta_2 = 0.999, max_iter = 500, epsilon = 1e-9)
         self.model.fit(X, y)
         print(self.model.score(X, y))
-=======
-        clf = neural_network.MLPClassifier(activation = 'relu', solver = 'adam', learning_rate = 'adaptive', learning_rate_init = 0.00005, beta_1 = 0.9, beta_2 = 0.999, max_iter = 500, epsilon = 1e-9)
-        clf.fit(X, y)
-        print(clf.score(X, y))
->>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
 
     def predict(self, X):
         '''
@@ -309,13 +259,7 @@ class model (BaseEstimator):
         return y[:,1]
         '''
         
-<<<<<<< HEAD
         return self.model.predict(X)
-=======
-        global clf
-        
-        return clf.predict(X)
->>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
         
 
     def save(self, path="./"):
@@ -328,22 +272,3 @@ class model (BaseEstimator):
                 self = pickle.load(f)
             print("Model reloaded from: " + modelfile)
         return self
-<<<<<<< HEAD
-=======
-
- class main ():
-	data = load("./pubic_data")
-	_init_(data)
-	
-	#data.data['Xtrain']=fit(self,data.data['Xtrain'])
-	#data.data['Ytrain']=fit(self,data.data['ytrain'])
-	
-	
-	pipe = Pipeline(BaseEstimator)
-        pipe 
-        Pipeline(memory=None,steps=[('reduction_dim',fit(self,data.data['Xtrain'],data.data['Ytrain'])) ),('lil_clf', lil_clf)])
-	
-	
-	
-	
->>>>>>> 6aec381dc2bc8814671ad1dcd8351fdac8c9a806
