@@ -24,6 +24,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.decomposition import PCA
 from sklearn.metrics import precision_score
+import sklearn.preprocessing as preprocessing
 
 from data_manager import DataManager
 
@@ -35,27 +36,51 @@ class Preprocessing(BaseEstimator):
     def __init__(self):
         lil_clf = SVC(kernel='linear') # classifieur lineaire
         self.transformer = PCA(n_components=100) # on veut que le resultat soit compose de 100 features
-        """
-        self.pipe = Pipeline(BaseEstimator)
-        self.pipe 
-        Pipeline(memory=None, steps=[('reduction_dim', self.fit(self, data.data['Xtrain'], data.data['Ytrain'])), ('lil_clf', lil_clf)])
-        Pipeline(steps=[('process', Preprocessing()), ('clf', self.classifier)])
-        """
         
-    def fit(self, Xtrain, Ytrain):
-        # premiere methode de preprocessing
-        X_scaled = preprocessing.scale(X_train)
-        Y_scaled = preprocessing.scale(Y_train)
-        Xtrain_transf=self.transformer.fit_transform(Xtrain)
-        Ytrain_transf=self.transformer.fit_transform(Ytrain)       
-        return Xtrain_transf,Ytrain_transf
+        ''' 
+        self.transformer = LDA(n_componants=100, solver='svd' #decomposition des valeurs singuliere)#on test une implementation du LDA 
+        '''
+        
+    	
+        #self.pipe = Pipeline(BaseEstimator)
+        #self.pipe 
+        #Pipeline(memory=None, steps=[('reduction_dim',fit(self,data.data['Xtrain'],data.data['Ytrain'])), ('lil_clf', lil_clf)])
+        
+    def fit(self, X,Y):
+        # standardisation des donnees
+        X_scaled = preprocessing.scale(X)
+        Y_scaled = preprocessing.scale(Y)
+        #reduction du nombre de features
+        transf=self.transformer.fit_transform(X_scaled,Y_scaled)
+	
+        return transf
 
-    def fit_transform(self, X, Y):
+    def fit_transform(self, X,Y):
         return self.transformer.fit_transform(X,Y)
 
-    def transform(self, X, Y):
+    def transform(self, X,Y):
         return self.transformer.transform(X,Y)
-
+		
+class test_preprocessing():
+    
+    def testPreprocessing():
+        
+        fichier_data = "public_data/perso_train.data"#on va cherhcer les données d'entrainement
+        datas = np.loadtxt(fichier_data, separateur=" ")#on va cherhcer les données d'entrainement, chaque donnée est delimité par " "
+        prepro = preprocessing()
+        Tab = prepro.fit(datas)#on preprocess des données
+        transf_Tab = prepro.transform(Tab)
+        #on verifie que le preprocessing a agit sur les données, c'est a dire s'il y a des données censuré
+        censured_data=0
+        for i in range(0,transf_Tab.lenth):
+            if i == 1 :
+                print(i," est Censuré")
+                censured_data+=1
+            
+        if censured_data!=0:
+            return True
+        
+        
 class model (BaseEstimator):
 
     def __init__(self):
@@ -68,7 +93,8 @@ class model (BaseEstimator):
         self.num_labels = 2
         self.is_trained = False
         self.model = neural_network.MLPClassifier(activation = 'relu', solver = 'adam', learning_rate = 'adaptive', learning_rate_init = 0.00005, beta_1 = 0.9, beta_2 = 0.999, max_iter = 500, epsilon = 1e-9)
-        
+        self.preproc = Preprocessing()
+         
     def fit(self, X, y):
         '''
         This function should train the model parameters.
@@ -100,6 +126,8 @@ class model (BaseEstimator):
         '''
         
         self.model.fit(X, y)
+        #Pipeline(steps=[('Preprocessing',X), ('clf', self.model)])
+
         print(self.model.score(X, y))
 
     def predict(self, X):
